@@ -19,6 +19,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Impl layer that performs database access.
+ *
+ * @author jimil
+ */
 public class MongoImpl {
 
     private MongoClient mongo;
