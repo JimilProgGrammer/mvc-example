@@ -1,0 +1,36 @@
+<div class="outer-box">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" style="color: white;">
+          <div class="card card-signin my-5" style="background: rgba(0, 0, 0, 0.4)">
+            <div class="card-body">
+              <h3 class="card-title text-center" style="font-size: 1.75rem; font-weight: bold;">Sign In</h3>
+              <form class="form-signin" ngNativeValidate>
+                <div class="form-label-group">
+                  <label for="inputEmail">Email address</label>
+                  <input type="email" id="inputEmail" class="form-control" placeholder="example@domain.com" name="loginEmail" [(ngModel)]="loginEmail" required autofocus>
+                </div>
+                <br/>
+                <div class="form-label-group">
+                  <label for="inputPassword">Password</label>
+                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="loginPwd" [(ngModel)]="loginPwd" required>
+                </div><br/>
+  
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" 
+                  (click)="attemptLogin()" style="background-color: #3c4678; border-color: #3c4678;"
+                  onmouseover="this.style.background='#6774be'" onmouseout="this.style.background='#3c4678'">Sign in</button>
+                <p style="text-align: center; color: red; font-weight: bold;" *ngIf="errorMsg">
+                  {{errorMsg}}
+                </p>
+                <hr class="my-4">
+                <p style="text-align: center;">Don't have an account? 
+                  <a routerLink="/signup">Sign Up!</a>
+                </p>
+              </form>
+            </div>
+          </div>
+          <br/><br/><br/><br/><br/>
+        </div>
+      </div>
+    </div>
+  </div>

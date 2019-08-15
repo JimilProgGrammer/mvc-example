@@ -1,0 +1,76 @@
+<div class="outer-box">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" style="color: white;">
+          <div class="card card-signin my-5" style="background: rgba(0, 0, 0, 0.4)">
+            <div class="card-body">
+              <h3 class="card-title text-center" style="font-size: 1.75rem; font-weight: bold;">Sign Up</h3>
+              <form class="form-signin" ngNativeValidate>
+                <div class="form-label-group">
+                  <label for="inputFname">First Name:</label>
+                  <input type="text" id="inputFname" class="form-control" placeholder="John" name="fname" [(ngModel)]="fname" required autofocus>
+                </div>
+                <br/>
+                <div class="form-label-group">
+                  <label for="inputLname">Last Name:</label>
+                  <input type="text" id="inputLname" class="form-control" placeholder="Doe" name="lname" [(ngModel)]="lname" required>
+                </div>
+                <br/>
+                <div class="form-label-group">
+                  <label for="inputEmail">Email address</label>
+                  <input type="email" id="inputEmail" class="form-control" placeholder="johndoe@example.com" name="email" [(ngModel)]="email" required>
+                </div>
+                <br/>
+                <div class="form-label-group">
+                  <label for="inputPassword">Password</label>
+                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="pwd" [(ngModel)]="pwd" minlength="8" required>
+                </div><br/>
+  
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" 
+                  (click)="registerUser()" style="background-color: #3c4678; border-color: #3c4678;"
+                  onmouseover="this.style.background='#6774be'" onmouseout="this.style.background='#3c4678'"
+                  [disabled]="registerDisabled">Register Now!</button>
+                <br/>
+                  <p style="text-align: center; color: red; font-weight: bold;" *ngIf="errorMsg">
+                  {{errorMsg}}
+                </p>
+                <hr class="my-4">
+                <p style="text-align: center;">Already have an account? 
+                  <a routerLink="/login">Login!</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="verifyOtp" type="button" class="btn btn-primary" data-toggle="modal" data-target="#verifyOtpModal" data-backdrop="static" data-keyboard="false" hidden>
+  </button>
+  
+  <!-- OTP Verify Modal -->
+  <div class="modal fade" id="verifyOtpModal" tabindex="-1" role="dialog" aria-labelledby="verifyOtpModalLabel" aria-hidden="true" style="color: black;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Verify Your Email</h5>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <p>Please enter the OTP sent to you on the registered email, to verify your account.</p>
+          <div class="form-label-group">
+            <label for="otp">OTP: </label>
+            <input type="text" name="otp" [(ngModel)]="otp" class="form-control" required="required"/>
+          </div>
+        </div>
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button id="dismissModal" type="button" class="btn btn-secondary" data-dismiss="modal" hidden>Close</button>
+          <button type="submit" class="btn btn-primary" (click)="verifyOtp()" style="background-color: #3c4678; border-color: #3c4678;"
+          onmouseover="this.style.background='#6774be'" onmouseout="this.style.background='#3c4678'">Verify OTP</button>
+        </div>
+      </div>
+    </div>
+  </div>
