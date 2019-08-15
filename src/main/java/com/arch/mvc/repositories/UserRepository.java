@@ -18,13 +18,13 @@ public class UserRepository extends MongoImpl {
      * Inserts a new user into the database provided
      * he/she doesn't already exist.
      *
-     * @param key
+     * @param queryDoc
      * @param updateDoc
      * @return
      * @throws Exception
      */
-    public boolean insertNewUser(String key, Document updateDoc) throws Exception {
-        return super.insertSingleDocumentIfNotExist(CollectionConstants.USERS, key, updateDoc);
+    public void insertNewUser(Document queryDoc, Document updateDoc) throws Exception {
+        super.updateRecords(queryDoc, updateDoc, CollectionConstants.USERS);
     }
 
     /**

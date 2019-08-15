@@ -35,7 +35,7 @@ public class MongoImpl {
     private void lazyInitMongoDB() {
         //initialize Mongo connection
         this.mongo = new MongoClient();
-        this.db = mongo.getDatabase("portfolio_manager");
+        this.db = mongo.getDatabase("stocks_sentiment");
     }
 
     /**
