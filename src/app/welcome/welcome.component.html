@@ -1,3 +1,65 @@
-<p>
-  welcome works!
-</p>
+<app-navbar>
+
+</app-navbar>
+
+<div class="container">
+  <br/>
+  <div class="card shadow p-3 mb-5 bg-white rounded">
+    <!-- ROW 1: Title Row -->
+    <div class="row">
+      <div class="col-md-12 col-sm-12 text-center">
+        <h2 style="text-align: center;">List of Tweets</h2>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 text-center">
+        <span style="color: red" *ngIf="errorMsg">{{errorMsg}}</span>
+      </div>
+    </div>
+    <!-- ROW 2: Filters -->
+    <div class="row">
+      <!-- QC Done Filter -->
+      <div class="col-md-6 col-sm-6">
+        Sentiment:
+        <select class="form-control" name="sentiment" [(ngModel)]="sentiment" (ngModelChange)="onSelectChange()" required>
+          <option value="positive">Positive</option>
+          <option value="negative">Negative</option>
+          <option value="neutral">Neutral</option>
+        </select>
+      </div>
+      <!-- Clear Filter -->
+      <div class="col-md-3 col-sm-4">
+        <br/>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="clearFilters()" style="margin: auto; display: block;">Clear</button>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <!-- ROW 2: Article Tables -->
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <table class="table table-hover table-responsive" style="table-layout: fixed;">
+          <thead class="thead-dark">
+            <tr>
+              <th>Author</th>
+              <th>Date</th>
+              <th>Message</th>
+              <th>Polarity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tweet of tweets">
+              <td>{{tweet.author}}</td>
+              <td>{{tweet.date}}</td>
+              <th>{{tweet.message}}</th>
+              <td>{{tweet.polarity}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+  </div>
+</div>
