@@ -2,6 +2,10 @@ import json
 import time
 import re
 
+import pandas as pd
+import nltk
+nltk.download('punkt')
+
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
@@ -18,6 +22,15 @@ class TweetStreamListener(StreamListener):
 
     # on success
     def on_data(self, data):
+
+        print("New Tweet Fetched!")
+
+        global count
+        count = count + 1
+
+        if(count == 100):
+            print("20 tweets fetched. Now returning")
+            return True
 
         # decode json
         dict_data = json.loads(data)
@@ -51,6 +64,7 @@ class TweetStreamListener(StreamListener):
         text_filtered = str(tweet)
         tweetid = int(dict_data.get("id"))
         text_raw = str(dict_data.get("text"))
+        full_text = str(dict_data.get("full_text"))
 
         # output twitter data
         print("\n------------------------------")
@@ -64,6 +78,7 @@ class TweetStreamListener(StreamListener):
         print("Tweet ID: " + str(tweetid))
         print("Tweet Raw Text: " + text_raw)
         print("Tweet Filtered Text: " + text_filtered)
+        print("Full Text: " + full_text)
 
         if friends == 0 or followers == 0 or statuses == 0 or tweet == "":
             print("Tweet doesn't meet min requirements, not adding")
@@ -72,15 +87,22 @@ class TweetStreamListener(StreamListener):
         # strip out hashtags for language processing
         tweet = re.sub(r"[#|@|\$]\S+", "", tweet)
         tweet.strip()
+        tweet = re.sub(r"[@|@|\$]\S+", "", tweet)
+        tweet.strip()
         # ------------------------- END DATA CLEANING -------------------------
 
         # pass tweet into TextBlob
         tweet = TextBlob(dict_data["text"])
+        polarities = []
 
+        for sentence in tweet.sentences:
+            polarities.append(sentence.sentiment.polarity)
+
+        tweet_polarity = sum(polarities)
         # determine if sentiment is positive, negative, or neutral
-        if tweet.sentiment.polarity < 0:
+        if tweet_polarity < 0:
             sentiment = "negative"
-        elif tweet.sentiment.polarity == 0:
+        elif tweet_polarity == 0:
             sentiment = "neutral"
         else:
             sentiment = "positive"
@@ -94,6 +116,7 @@ class TweetStreamListener(StreamListener):
                  body={"author": dict_data["user"]["screen_name"],
                        "date": created_date,
                        "message": dict_data["text"],
+                       "full_text": full_text,
                        "polarity": tweet.sentiment.polarity,
                        "subjectivity": tweet.sentiment.subjectivity,
                        "sentiment": sentiment})
@@ -124,6 +147,9 @@ def create_index(es_object, index_name='sentiment'):
                     "message": {
                         "type": "text"
                     },
+                    "full_text": {
+                        "type": "text"
+                    },
                     "polarity": {
                         "type": "float"
                     },
@@ -142,7 +168,7 @@ def create_index(es_object, index_name='sentiment'):
             # Ignore 400 means to ignore "Index Already Exist" error.
             es_object.indices.create(index=index_name, ignore=400, body=settings)
             print('Created Index')
-        created = True
+            created = True
     except Exception as ex:
         print(str(ex))
     finally:
@@ -155,15 +181,24 @@ if __name__ == '__main__':
 
     # create instance of the tweepy tweet stream listener
     listener = TweetStreamListener()
+    print("Listener initialized.")
 
     # set twitter keys/tokens
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
+    print("Auth done.")
+
+    # create instance of tweepy API
+    # api = API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, retry_count=10, retry_delay=900, retry_errors=420)
 
     # create instance of the tweepy stream
     stream = Stream(auth, listener)
+    print("Stream created.")
 
-    # TODO: Create list of Nifty 50 stocks and perform sentiment analysis by doing stream.filter in a for-each loop
-
-    # search twitter for "congress" keyword
-    stream.filter(track=['congress'])
+    # Read Nifty 50 stocks and fetch tweets -> apply sentiment analysis
+    stock_list = read_nifty_50_stocks()
+    global count
+    count = 0
+    # search twitter for the stock symbol
+    # print("Searching tweets for: " + symbol)
+    stream.filter(track=["#StopIllegalArrestsInKashmir","#Article370Scrapped","#KashmirWithModi"],languages=["en"])
