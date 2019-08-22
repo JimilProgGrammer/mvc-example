@@ -34,6 +34,16 @@ public class AppUtils {
     }
 
     /**
+     * Util method to hash password using BCrypt
+     *
+     * @param plainTextPassword
+     * @return
+     */
+    public static String hashPassword(String plainTextPassword){
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+
+    /**
      * This method is used to return a random 6-digit OTP
      *
      * @return

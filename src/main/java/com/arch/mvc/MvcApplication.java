@@ -13,16 +13,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 							,"com.arch.mvc.repositories"
 							,"com.arch.mvc.dto"
 							,"com.arch.mvc.utils"
-							,"com.arch.mvc.constants"})
+							,"com.arch.mvc.constants"
+							,"com.arch.mvc.models"})
 public class MvcApplication {
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MvcApplication.class, args);
-	}
-
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 
 }

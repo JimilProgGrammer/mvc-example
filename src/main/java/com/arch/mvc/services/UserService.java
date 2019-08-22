@@ -33,9 +33,6 @@ import java.util.UUID;
 public class UserService {
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
     private UserRepository userRepository;
 
     /**
@@ -95,7 +92,7 @@ public class UserService {
         }
         userDoc = userRegistrationDTO.toDocument();
         userDoc.remove(DBConstants.PASSWORD);
-        userDoc.append(DBConstants.PASSWORD, bCryptPasswordEncoder.encode(userRegistrationDTO.getPassword()));
+        userDoc.append(DBConstants.PASSWORD, AppUtils.hashPassword(userRegistrationDTO.getPassword()));
         String otp = AppUtils.getSaltString();
         sendOtpVerificationMail(userRegistrationDTO.getfName(), userRegistrationDTO.getUsername(), otp);
         userDoc.append(DBConstants.OTP, otp).append(DBConstants.OTP_VERIFIED, false);
